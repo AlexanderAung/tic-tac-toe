@@ -1,0 +1,141 @@
+openapi: 3.0.3
+
+info:
+title: Tic-Tac-Toe API
+version: 1.0.0
+description: API for a Tic-Tac-Toe game against an AI.
+
+servers:
+
+* url: http://localhost:5000
+
+paths:
+/games:
+post:
+summary: Create a new game
+operationId: createGame
+requestBody:
+required: true
+content:
+application/json:
+schema:
+type: object
+required:
+- player_symbol
+properties:
+player_symbol:
+type: string
+enum: [X, O]
+responses:
+"201":
+description: Game created
+content:
+application/json:
+schema:
+$ref: "#/components/schemas/Game"
+"400":
+description: Invalid player symbol
+
+/games/{game_id}/moves:
+post:
+summary: Make a move
+operationId: makeMove
+parameters:
+- name: game_id
+in: path
+required: true
+schema:
+type: string
+requestBody:
+required: true
+content:
+application/json:
+schema:
+type: object
+required: [row, col]
+properties:
+row:
+type: integer
+minimum: 0
+maximum: 2
+col:
+type: integer
+minimum: 0
+maximum: 2
+responses:
+"200":
+description: Move processed
+content:
+application/json:
+schema:
+$ref: "#/components/schemas/Game"
+"400":
+description: Invalid coordinates
+"404":
+description: Game not found
+"409":
+description: Cell occupied or game already ended
+
+/games/{game_id}:
+get:
+summary: Get current game state
+operationId: getGame
+parameters:
+- name: game_id
+in: path
+required: true
+schema:
+type: string
+responses:
+"200":
+description: Current game state
+content:
+application/json:
+schema:
+$ref: "#/components/schemas/Game"
+"404":
+description: Game not found
+
+components:
+schemas:
+Game:
+type: object
+required:
+- game_id
+- player_symbol
+- ai_symbol
+- board
+- status
+- next_turn
+- winner
+properties:
+game_id:
+type: string
+player_symbol:
+type: string
+enum: [X, O]
+ai_symbol:
+type: string
+enum: [X, O]
+board:
+type: array
+minItems: 3
+maxItems: 3
+items:
+type: array
+minItems: 3
+maxItems: 3
+items:
+type: string
+enum: ["", X, O]
+status:
+type: string
+enum: [in_progress, won, draw]
+next_turn:
+type: string
+nullable: true
+enum: [human, ai]
+winner:
+type: string
+nullable: true
+enum: [X, O]
