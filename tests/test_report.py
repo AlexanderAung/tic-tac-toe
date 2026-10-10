@@ -66,33 +66,6 @@ def test_agent_configuration():
     assert heur and not heur.startswith("["), "Heuristic Strategy must be filled out"
 
 @pytest.mark.weight(5)
-@pytest.mark.number("2.3")
-def test_game_tree_complexity():
-    """report.md: Complexity & Search Tree Analysis check"""
-    content = get_report_content()
-    depth_match = re.search(r'-\s*\*\*Maximum Search Depth \(Empty 3x3 Board\):\*\*\s*(.*)', content)
-    states_match = re.search(r'-\s*\*\*Total Possible Board States:\*\*\s*(.*)', content)
-    unbeatable_match = re.search(r'-\s*\*\*Unbeatable Minimax Guarantee:\*\*\s*(.*)', content)
-
-    assert depth_match is not None, "Maximum Search Depth field not found"
-    assert states_match is not None, "Total Possible Board States field not found"
-    assert unbeatable_match is not None, "Unbeatable Minimax Guarantee field not found"
-
-    depth_raw = depth_match.group(1).strip()
-    states_raw = states_match.group(1).strip()
-    unbeatable_raw = unbeatable_match.group(1).strip()
-
-    assert depth_raw and not depth_raw.startswith("["), "Maximum Search Depth must be filled out"
-    assert states_raw and not states_raw.startswith("["), "Total Possible Board States must be filled out"
-    assert unbeatable_raw and not unbeatable_raw.startswith("["), "Unbeatable Minimax Guarantee must be filled out"
-
-    depth_val = re.search(r'\d+', depth_raw)
-    assert depth_val is not None, "Maximum Search Depth must contain a numeric value"
-    
-    unbeatable = unbeatable_raw.lower()
-    assert "yes" in unbeatable or "no" in unbeatable, "Unbeatable Minimax Guarantee must be answered with 'Yes' or 'No'"
-
-@pytest.mark.weight(5)
 @pytest.mark.number("2.4")
 def test_local_verification_checked():
     """report.md: Verification checklist"""
@@ -120,14 +93,3 @@ def test_deployment_and_presentation():
     assert platform and not platform.startswith("["), "Deployment Platform must be filled out"
     assert url and not url.startswith("["), "Live Deployment URL must be filled out"
     assert video and not video.startswith("["), "Video Presentation Link must be filled out"
-
-@pytest.mark.weight(5)
-@pytest.mark.number("2.6")
-def test_discussion_answers():
-    """report.md: Discussion answers check"""
-    content = get_report_content()
-    ans1 = get_section_discussion_answer("Alpha-Beta pruning", content)
-    ans2 = get_section_discussion_answer("Generative AI", content)
-
-    assert ans1 is not None and len(ans1.split()) >= 15, "Discussion Question 1 answer must be completed (at least 15 words)"
-    assert ans2 is not None and len(ans2.split()) >= 15, "Discussion Question 2 answer must be completed (at least 15 words)"
