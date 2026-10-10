@@ -54,11 +54,15 @@ The API manages Tic-Tac-Toe games between a human player and an AI opponent.
 
 ```json
 {
-  "player_symbol": "X"
+  "player_symbol": "X",
+  "difficulty": "medium"
 }
 ```
 
 `player_symbol` must be `X` or `O`.
+`difficulty` is optional and accepts `easy`, `medium`, or `hard`; it defaults to
+`medium` when omitted. These values select the `RandomAgent`, `HeuristicAgent`,
+and `MinimaxAgent`, respectively.
 
 **Successful response:** `201 Created`
 
@@ -82,7 +86,8 @@ If the human chooses `O`, the backend makes the AI's opening move before returni
 
 **Errors:**
 
-* `400 Bad Request`: Missing or invalid `player_symbol`.
+* `400 Bad Request`: Invalid JSON, missing or invalid `player_symbol`, or an
+  unsupported `difficulty`.
 
 ### 4.2 Make a Move
 
@@ -146,6 +151,14 @@ Returns the same game-state structure used by the other endpoints.
 **Errors:**
 
 * `404 Not Found`: The game does not exist.
+
+### Error response
+
+All errors use a JSON object with an `error` string, for example:
+
+```json
+{"error": "Game not found"}
+```
 
 ## 5. Game-State Response Fields
 
