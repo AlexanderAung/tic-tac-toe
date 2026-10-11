@@ -6,6 +6,8 @@ export default function Board({ board, onSquareClick }) {
       display: 'grid',
       gridTemplateColumns: 'repeat(3, 80px)',
       gap: 4,
+      width: 'fit-content',
+      marginInline: 'auto',
     }}>
       {board.map((value, i) => (
         <Square key={i} value={value} onClick={() => onSquareClick(i)} />
